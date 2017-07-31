@@ -1,16 +1,25 @@
 /**
- * TDI-Tuning Dropdown (Vanilla Javascript) v1.0
+ * TDI-Tuning Dropdown (jQuery) v1.0
  * 
  * Copyright 2017, Samuel Laycock
  * https://github.com/samuellaycock
  * samuel.paul.laycock@gmail.com
  */
 
-;(function(window) {
+;(function(window, $) {
 
   'use strict';
 
   // Utilities
+
+  /**
+   * capitalize()
+	 * @desc capitalizes the context's first letter
+   * @returns string - the capitalized string 
+   */
+  String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+  }
 
   /**
    * createElement()
@@ -20,105 +29,55 @@
    * @returns element - the created element
 	 */
 	function createElement(tag, options) {
-		var el = document.createElement(tag);
+		var el = $('<' + tag + '/>');
 
 		if (options) {
       if (options.id) {
-				el.id = options.id;
+				$(el).attr('id', options.id);
 			}
 			if (options.class) {
-				el.className += ' ' + options.class;
+				$(el).addClass(options.class)
 			}
       if (options.type) {
-        el.type = options.type;
+        $(el).attr('type', options.type);
       }
       if (options.href) {
-        el.href = options.href;
+        $(el).attr('href', options.href);
       }
       if (options.method) {
-        el.method = options.method;
+        $(el).attr('method', options.method);
       }
       if (options.name) {
-        el.name = options.name;
+        $(el).attr('name', options.name);
       }
       if (options.value) {
-        el.value = options.value;
+        $(el).attr('value', options.value);
       }
       if (options.disabled) {
-        el.disabled = options.disabled;
+        $(el).prop('disabled', options.disabled);
       }
       if (options.dataType) {
-        el.dataset.type = options.dataType;
+        $(el).attr('data-type', options.dataType);
       }
       if (options.dataStage) {
-        el.dataset.stage = options.dataStage;
+        $(el).attr('data-stage', options.dataStage);
       }
       if (options.dataIndex) {
-        el.dataset.index = options.dataIndex;
+        $(el).attr('data-index', options.dataIndex);
       }
       if (options.dataValue) {
-        el.dataset.value = options.dataValue;
+        $(el).attr('data-value', options.dataValue);
       }
 			if (options.innerHtml) {
-				el.innerHTML = options.innerHtml;
+				$(el).html(options.innerHtml);
 			}
 			if (options.appendTo) {
-				options.appendTo.appendChild(el);
+				$(options.appendTo).append(el);
 			}
 		}
 
 		return el;
 	}
-
-  /**
-   * addClass()
-	 * @desc adds a class to the given element(s)
-	 * @param string||element `elements` - string representing an array of elements in the document or a single element object
-   * @param string `classToAdd` - string representing the class to be added to the given element(s)
-	 */
-  function addClass(elements, classToAdd) {
-    if (!elements) { return; }
-
-    if (typeof(elements) === 'string') {
-      elements = document.querySelectorAll(elements);
-    } else if (elements.tagName) {
-      elements = [elements];
-    }
-
-    for (var i = 0; i < elements.length; i++) {
-      if ( (' '+elements[i].className+' ').indexOf(' '+classToAdd+' ') < 0 ) {
-        elements[i].className += ' ' + classToAdd;
-      }
-    }
-  }
-
-  /**
-   * removeClass()
-   * @desc removes a class from the given element(s)
-	 * @param string||element `elements` - string representing an array of elements in the document or a single element object
-   * @param string `classToAdd` - string representing the class to be removed from the given element(s)
-	 */
-  function removeClass(elements, classToRemove) {
-    var reg = new RegExp('(^| )'+ classToRemove + '($| )','g');
-
-    if (!elements) { return; }
-
-    if (typeof(elements) === 'string') {
-      elements = document.querySelectorAll(elements);
-    } else if (elements.tagName) { 
-      elements = [elements];
-    }
-
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].className = elements[i].className.replace(reg,' ');
-    }
-  }
-
-  function triggerEvent(el, type) {
-    if ((el[type] || false) && typeof el[type] == 'function') {
-      el[type](el);
-    }
-  }
 
   // TDISelect Class
 
@@ -208,7 +167,7 @@
         closeButton = this.closeButton;
 
     // add click event to back button we've created
-    backButton.addEventListener('click', function() {
+    $(backButton).on('click', function() {
       var currentStage = self.currentStage,
           prevStage = currentStage - 1;
 
@@ -218,45 +177,45 @@
     });
 
     // add click event to close button we've created
-    closeButton.addEventListener('click', function() {
+    $(closeButton).on('click', function() {
       if(self.open) {
         self.open = false;
-        removeClass(self.proxy.container, 'open');
+        $(self.proxy.container).removeClass('open');
       }
     });
 
     // add change event to each select element we've created, except the last one
     for (var key in stages) {
       if (key < 7) {
-        stages[key].addEventListener('change', function() {
+        $(stages[key]).on('change', function() {
           self._selectOption(this);
         });
       }
     }
 
     // add change event to final select element we've created
-    stages[7].addEventListener('change', function() {
+    $(stages[7]).on('change', function() {
       self._selectProduct(this);
     });
 
     // add click event to first option proxy to set select as open
-    stageProxies[1].firstChild.addEventListener('click', function() {
+    $(stageProxies[1]).first().on('click', function() {
       if (!self.active) {
         self.open = true;
-        addClass(self.proxy.container, 'open');
+        $(self.proxy.container).addClass('open');
       }
     });
 
     // add click event to each nav input element we've created
     for (var key in nav) {
-      nav[key].addEventListener('click', function(  ) {
+      $(nav[key]).on('click', function(  ) {
         self._selectNavigation(this);
       });
     }
 
     // add click event to product contain close button we've created
-    product.children[0].addEventListener('click', function() {
-      removeClass(self.el, 'show-product');
+    $(product).first().on('click', function() {
+      $(self.el).removeClass('show-product');
     })
   }
 
@@ -322,7 +281,7 @@
 
     // if we've successfully created option elements, set the parent select input as enabled
     if (Object.keys(elements).length) {
-      el.disabled = false;
+      $(el).prop('disabled', false);
     }
 
     // return the created options
@@ -341,27 +300,26 @@
         elements = {};
     
     // first, create the option list title
-    createElement('li', {class: ' tdi-select-proxy-section-item-list-title', innerHtml: el.dataset.type, appendTo: el});
+    createElement('li', {class: ' tdi-select-proxy-section-item-list-title', innerHtml: $(el).attr('data-type'), appendTo: el});
 
     // iterate through the data and create a proxy for each value
     for (var i = 0; i < data.length; i++) {
       var element = createElement('li', {id: data[i].id + '-option-proxy', innerHtml: data[i].text, dataValue: data[i].id, appendTo: el});
 
       // each proxy must respond to a click to update it's related select value
-      element.addEventListener('click', function() {
-        var parent = this.parentElement.parentElement,
-            stage = parent.dataset.stage,
-            value = this.dataset.value,
-            prevSelection = el.querySelectorAll('.active'),
-            select = self.stages[stage],
-            event = new Event('change');
+      $(element).on('click', function() {
+        var parent = $($(this).parent()).parent(),
+            stage = $(parent).attr('data-stage'),
+            value = $(this).attr('data-value'),
+            prevSelection = el.children('.active'),
+            select = self.stages[stage];
         
-        removeClass(prevSelection, 'active');
-        addClass(this, 'active');
+        $(prevSelection).removeClass('active');
+        $(this).addClass('active');
 
-        select.value = value;
-        select.dispatchEvent(event);
-      })
+        $(select).val(value);
+        $(select).change();
+      });
 
       elements[i + 1] = element || null;
     }
@@ -410,9 +368,9 @@
         proxyOptions = this.proxy.options,
         finalStage = this.finalStage,
         nav = this.navigation,
-        val = el.value,
-        type = el.dataset.type,
-        stage = el.dataset.stage,
+        val = $(el).val(),
+        type = $(el).attr('data-type'),
+        stage = $(el).attr('data-stage'),
         nextStage = Number(stage) + 1;
     
     // set the selected value in the selection object
@@ -427,17 +385,13 @@
           var selectElement = stages[key],
               proxyElement = proxies[key];
 
-          while (selectElement.children.length > 0) {
-            selectElement.removeChild(selectElement.children[0]);
-          }
+          $(selectElement).empty();
 
-          while (proxyElement.children.length > 0) {
-            proxyElement.removeChild(proxyElement.children[0]);
-          }
+          $(proxyElement).empty();
 
           // disable corresponding form and nav elements as they no longer have any data
-          selectElement.disabled = true;
-          nav[key].disabled = true;
+          $(selectElement).prop('disabled', true);
+          $(nav[key]).prop('disabled', true).removeClass('active');
 
           // class data clean up
           delete selection[key];
@@ -476,8 +430,8 @@
 	 */  
   TDISelect.prototype._selectProduct = function(el) {
     var selection = this.currentSelection,
-        stage = el.dataset.stage,
-        val = el.value;
+        stage = $(el).attr('data-stage'),
+        val = $(el).val();
     
     // first, make sure we update the final stage's value
     selection[stage] = val;
@@ -499,7 +453,7 @@
 	 */
   TDISelect.prototype._selectNavigation = function(el) {
     // get the triggered elements index
-    var index = el.dataset.index;
+    var index = $(el).attr('data-index');
 
     // update the stage
     this._goToStage(index);
@@ -513,12 +467,10 @@
   TDISelect.prototype._showProductDetails = function(data) {
     var el = this.el,
         product = this.product,
-        productContain = this.product.children[1];
+        productContain = $(product).children().eq(1);
 
     // first, clean up the existing UI if it exists
-    while (productContain.children.length > 0) {
-      productContain.removeChild(productContain.children[0]);
-    }
+    $(productContain).empty();
 
     // create the new UI boilerplate
     var productName = createElement('h1', {class: 'product-name', innerHtml: data.name, appendTo: productContain}),
@@ -560,7 +512,7 @@
       createElement('a', {class: 'product-instructions-item-link', href: data.instructions[i], innerHTML: data.instructions[i], appendTo: listItem});
     }
 
-    addClass(el, 'show-product');
+    $(el).addClass('show-product');
   }
 
   /**
@@ -572,19 +524,20 @@
     var nav = this.navigation,
         currentStage = this.currentStage,
         finalStage = this.finalStage,
+        proxy = this.proxy.container,
         activeNavItem = nav[currentStage],
         navItem = nav[stage];
 
     // if there is an active nav item, set it to unselected
     if (activeNavItem) {
-      activeNavItem.checked = false;
-      removeClass(activeNavItem, 'active');
+      $(activeNavItem).prop('checked', false);
+      $(activeNavItem).removeClass('active');
     }
 
     // update the new stage's nav item to be selected
-    navItem.checked =  true;
-    navItem.disabled = false;
-    addClass(navItem, 'active');
+    $(navItem).prop('checked', true);
+    $(navItem).prop('disabled', false);
+    $(navItem).addClass('active');
 
     // if we're moving past the current last stage, update the last stage to match
     if (stage > finalStage) {
@@ -592,7 +545,7 @@
     }
 
     // update the stage values accordingly
-    this.proxy.container.dataset.stage = stage;
+    $(proxy).attr('data-stage', stage);
     this.currentStage = stage;
   }
 
@@ -641,29 +594,24 @@
       // if we've already sent this request, get it from the cache object
       return this.cache[requestUrl]
     } else {
-      // if not, create an XHR
-      var xhr = new XMLHttpRequest(),
-          result = {};
+      // if not, create an AJAX request
+      var result = {}; 
 
-      xhr.onreadystatechange = function () {
-        var DONE = 4,
-            OK = 200;
-
-        if (this.readyState === DONE && this.status === OK) {
+      $.ajax({
+        async: false,
+        url: requestUrl,
+        headers: {
+          'Access-Control-Allow-Origin':'*'
+        },
+        dataType: 'json',
+        success: function(data) {
           result['success'] = true;
-          result['data'] = JSON.parse(this.responseText);
-
-          // only set the cache if we have data
-          self.cache[requestUrl] = result;
-        } else if (this.readyState === DONE && this.status !== OK) {
+          result['data'] = data;
+        },
+        error: function() {
           result['error'] = true;
         }
-      };
-
-      // send the request
-      xhr.open('GET', requestUrl, false);
-      xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-      xhr.send();
+      });
 
       // return the result of the request
       return result;
@@ -673,4 +621,4 @@
   // set a global namespace for conveniance
   window.TDISelect = TDISelect;
 
-})(window);
+})(window, jQuery);

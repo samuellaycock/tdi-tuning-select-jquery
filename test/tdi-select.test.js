@@ -100,7 +100,7 @@ describe('TDISelect :: INITIALISATION', function() {
   });
 
   it('FORM :: should create the form element as a form element', function() {
-    expect(select.form.nodeName).to.equal('FORM');
+    expect(select.form[0].tagName).to.equal('FORM');
   });
 
   // Proxies
@@ -109,7 +109,7 @@ describe('TDISelect :: INITIALISATION', function() {
   });
 
   it('PROXY :: should create the proxy container element as a div element', function() {
-    expect(select.proxy.container.nodeName).to.equal('DIV');
+    expect(select.proxy.container[0].tagName).to.equal('DIV');
   });
 
   it('PROXY :: should create the proxy list element', function() {
@@ -117,7 +117,7 @@ describe('TDISelect :: INITIALISATION', function() {
   });
 
   it('PROXY :: should create the proxy list element as an ul element', function() {
-    expect(select.proxy.list.nodeName).to.equal('UL');
+    expect(select.proxy.list[0].tagName).to.equal('UL');
   });
 
   it('PROXY :: should create the proxy stages object', function() {
@@ -129,7 +129,7 @@ describe('TDISelect :: INITIALISATION', function() {
   });
 
   it('PROXY :: should create the proxy stages object with values of ul elements', function() {
-    expect(select.proxy.stages[1].nodeName).to.equal('UL');
+    expect(select.proxy.stages[1][0].tagName).to.equal('UL');
   });
 
   it('PROXY :: should create the proxy options object', function() {
@@ -145,7 +145,7 @@ describe('TDISelect :: INITIALISATION', function() {
   });
 
   it('PROXY :: should create the proxy options object with values of objects of li elements', function() {
-    expect(select.proxy.options[1][1].nodeName).to.equal('LI');
+    expect(select.proxy.options[1][1][0].tagName).to.equal('LI');
   });
 
   // Product
@@ -154,7 +154,7 @@ describe('TDISelect :: INITIALISATION', function() {
   });
 
   it('PRODUCT :: should create the product object as a div element', function() {
-    expect(select.product.nodeName).to.equal('DIV');
+    expect(select.product[0].tagName).to.equal('DIV');
   });
 
   // Stages
@@ -167,7 +167,7 @@ describe('TDISelect :: INITIALISATION', function() {
   });
 
   it('STAGES :: should create the stages object with values of select elements', function() {
-    expect(select.stages[1].nodeName).to.equal('SELECT');
+    expect(select.stages[1][0].tagName).to.equal('SELECT');
   });
 
   // Navigation
@@ -180,7 +180,7 @@ describe('TDISelect :: INITIALISATION', function() {
   });
 
   it('NAVIGATION :: should create the navigation object with values of input elements', function() {
-    expect(select.navigation[1].nodeName).to.equal('INPUT');
+    expect(select.navigation[1][0].tagName).to.equal('INPUT');
   });
 
   it('NAVIGATION :: should create the close button element', function() {
@@ -188,7 +188,7 @@ describe('TDISelect :: INITIALISATION', function() {
   });
 
   it('NAVIGATION :: should create the close button element as an i element', function() {
-    expect(select.closeButton.nodeName).to.equal('I');
+    expect(select.closeButton[0].tagName).to.equal('I');
   });
 
   // Options
@@ -205,7 +205,7 @@ describe('TDISelect :: INITIALISATION', function() {
   });
 
   it('OPTIONS :: should create the options object with values of objects of option elements', function() {
-    expect(select.options[1][1].nodeName).to.equal('OPTION');
+    expect(select.options[1][1][0].tagName).to.equal('OPTION');
   });
 
 });
@@ -226,13 +226,13 @@ describe('TDISelect :: CREATION', function() {
   it('SELECTS :: should create the select objects as select elements', function() {
     select.stages = select._createSelects([{'id': 'test'}], el);
 
-    expect(select.stages[1].nodeName).to.equal('SELECT');
+    expect(select.stages[1][0].tagName).to.equal('SELECT');
   });
 
   it('SELECTS :: should create the select objects using the given data', function() {
     select.stages = select._createSelects([{'id':'test'}], el);
 
-    expect(select.stages[1].dataset.type).to.equal('test');
+    expect($(select.stages[1][0]).attr('data-type')).to.equal('test');
   });
 
   // Select Proxies
@@ -245,13 +245,13 @@ describe('TDISelect :: CREATION', function() {
   it('SELECT PROXIES :: should create the select proxy objects as ul elements', function() {
     select.proxy.stages = select._createSelectProxies([{'id':'test'}], el);
 
-    expect(select.proxy.stages[1].nodeName).to.equal('UL');
+    expect(select.proxy.stages[1][0].tagName).to.equal('UL');
   });
 
   it('SELECT PROXIES :: should create the select proxy objects using the given data', function() {
     select.proxy.stages = select._createSelectProxies([{'id':'test'}], el);
 
-    expect(select.proxy.stages[1].dataset.type).to.equal('Test');
+    expect($(select.proxy.stages[1][0]).attr('data-type')).to.equal('Test');
   });
 
   // Options
@@ -261,16 +261,16 @@ describe('TDISelect :: CREATION', function() {
     expect(select.options[1][1]).to.exist;
   });
 
-  it('OPTIONS :: should create the select objects as select elements', function() {
+  it('OPTIONS :: should create the option objects as select elements', function() {
     select.options[1] = select._createOptions([{'id':'1','text':'test'}], el);
 
-    expect(select.options[1][1].nodeName).to.equal('OPTION');
+    expect(select.options[1][1][0].tagName).to.equal('OPTION');
   });
 
-  it('OPTIONS :: should create the select objects using the given data', function() {
+  it('OPTIONS :: should create the option objects using the given data', function() {
     select.options[1] = select._createOptions([{'id':'1','text':'test'}], el);
 
-    expect(select.options[1][1].value).to.equal('1');
+    expect($(select.options[1][1][0]).val()).to.equal('1');
   });
 
   // Option Proxies
@@ -283,13 +283,13 @@ describe('TDISelect :: CREATION', function() {
   it('OPTIONS PROXIES :: should create the select objects as li elements', function() {
     select.proxy.options[1] = select._createOptionProxies([{'id':'1','text':'test'}], el);
 
-    expect(select.proxy.options[1][1].nodeName).to.equal('LI');
+    expect(select.proxy.options[1][1][0].tagName).to.equal('LI');
   });
 
   it('OPTIONS PROXIES :: should create the select objects using the given data', function() {
     select.proxy.options[1] = select._createOptionProxies([{'id':'1','text':'test'}], el);
 
-    expect(select.proxy.options[1][1].dataset.value).to.equal('1');
+    expect($(select.proxy.options[1][1][0]).attr('data-value')).to.equal('1');
   });
 
   // Product Details
@@ -338,7 +338,7 @@ describe('TDISelect :: CREATION', function() {
       ]
     });
   
-    expect(select.product.children[1].children.length).to.be.above(0);
+    expect($(select.product).children().eq(1).children().length).to.be.above(0);
   });
 
   it('PRODUCT DETAILS :: should create the product detail heading as an h1 element', function() {
@@ -386,7 +386,7 @@ describe('TDISelect :: CREATION', function() {
       ]
     });
   
-    expect(select.product.children[1].children[0].nodeName).to.equal('H1');
+    expect($(select.product).children().eq(1).children().first()[0].tagName).to.equal('H1');
   });
 
   it('PRODUCT DETAILS :: should create the product detail heading using the given data', function() {
@@ -434,7 +434,7 @@ describe('TDISelect :: CREATION', function() {
       ]
     });
   
-    expect(select.product.children[1].children[0].textContent).to.equal('CRTD4 TWIN Channel Diesel Tuning Box Chip');
+    expect($(select.product).children().eq(1).children().first().html()).to.equal('CRTD4 TWIN Channel Diesel Tuning Box Chip');
   });
 });
 
@@ -446,11 +446,11 @@ describe('TDISelect :: SELECTION', function() {
   
   it('OPTION :: should set the correct value in the current selection object', function() {
     var selectEl = select.stages[1],
-      stage = selectEl.dataset.stage,
+      stage = $(selectEl).attr('data-stage'),
       option = select.options[1][1],
-      value = option.value;
+      value = $(option).val();
   
-    selectEl.value = value;
+    $(selectEl).val(value);
 
     select._selectOption(selectEl);
 
@@ -459,26 +459,26 @@ describe('TDISelect :: SELECTION', function() {
 
   it('OPTION :: should delete any later options when a previous one is changed', function() {
     var selectEl = select.stages[1],
-      stage = selectEl.dataset.stage,
+      stage = $(selectEl).attr('data-stage'),
       option = select.options[1][1],
-      value = option.value;
+      value = $(option).val();
   
-    selectEl.value = value;
+    $(selectEl).val(value);
     select._selectOption(selectEl);
 
     var nextSelectEl = select.stages[2],
-        nextStage = nextSelectEl.dataset.stage,
+        nextStage = $(nextSelectEl).attr('data-stage'),
         nextValue = 'test again';
     
     select._selectOption(nextSelectEl);
 
     var nextNextSelectEl = select.stages[3],
-        nextNextStage = nextNextSelectEl.dataset.stage,
+        nextNextStage = $(nextNextSelectEl).attr('data-stage'),
         nextNextValue = 'test again again';
 
     select._selectOption(selectEl);
 
-    expect(select.stages[nextNextStage].children.length).to.equal(0);
+    expect($(select.stages[nextNextStage]).children().length).to.equal(0);
   });
 
 });
@@ -502,7 +502,7 @@ describe('TDISelect :: STAGES', function() {
 
     select._goToStage(stage);
 
-    expect(select.navigation[stage].disabled).to.equal(false);
+    expect($(select.navigation[stage][0]).prop('disabled')).to.equal(false);
   });
 
   it('STAGE :: should set the correct nav item as active', function() {
@@ -510,7 +510,7 @@ describe('TDISelect :: STAGES', function() {
 
     select._goToStage(stage);
 
-    expect(select.navigation[stage].checked).to.equal(true);
+    expect($(select.navigation[stage][0]).prop('checked')).to.equal(true);
   });
 
 });

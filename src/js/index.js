@@ -1,3 +1,3 @@
-import './polyfills'
-import './tdi-select'
+import 'jquery'
+import './tdi-select.jquery'
 import '../styles/index.scss'
