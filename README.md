@@ -1,4 +1,4 @@
-# TDI Tuning API Dropdown Element
+# TDI Tuning API Dropdown Element (jQuery)
 
 To install project dependencies, run:
 
