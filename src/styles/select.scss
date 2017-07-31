@@ -50,12 +50,10 @@
 
 .tdi-select-proxy.open {
   max-height: 360px;
-  overflow-y: scroll;
-}
-
-.tdi-select-proxy.open::after {
-  opacity: 0;
-  visibility: hidden;
+  &::after {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 .tdi-select-proxy-section-list {
@@ -122,6 +120,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.tdi-select-proxy:not(.open) .tdi-select-proxy-section-item-list li:not(.tdi-select-proxy-section-item-list-title) {
+  display: none;
 }
 
 .tdi-select-proxy-section-item-list li:not(:first-child) {
